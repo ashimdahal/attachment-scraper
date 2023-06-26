@@ -1,4 +1,5 @@
 from imap_tools import MailBox, AND
+from datetime import datetime
 import ssl
 import argparse
 import os
@@ -21,22 +22,39 @@ args = parser.parse_args()
 HOSTNAME = args.Hostname
 
 
+def get_latest_attachment_date(filenames):
+    if not filenames:
+        return None
+    dates_and_times = [
+        datetime.strptime(
+            " ".join(filename.split(" ")[:5]), "%a, %d %b %Y %H:%M:%S"
+        ).date()
+        for filename in filenames
+    ]
+    return max(dates_and_times)
+
+
 def save_new_attachments(username, password, save_folder):
     with MailBox(HOSTNAME, ssl_context=ssl.create_default_context()).login(
         username, password, initial_folder="INBOX"
     ) as mailbox:
-        print("Login Success")
-        # Fetch emails with attachments
-        emails = mailbox.fetch(AND(seen=False))
+        latest_date = get_latest_attachment_date(os.listdir(save_folder))
+        emails = mailbox.fetch(
+            AND(
+                date_gte=latest_date,
+            ),
+            mark_seen=False,
+        )
+        latest_date = get_latest_attachment_date(os.listdir(save_folder))
 
         # emails= mailbox.fetch(criteria=mailbox.has_attachment())
         # Iterate over emails with attachments
         for email in emails:
-            print(email.subject)
+            # print(email.subject)
             if not (email.attachments):
-                mailbox.flag(
-                    [email.uid], imap_tools.MailMessageFlags.SEEN, False
-                )  # noqa
+                # mailbox.flag(
+                #     [email.uid], imap_tools.MailMessageFlags.SEEN, False
+                # )  # noqa
                 continue
             for attachment in email.attachments:
                 attachment_fname = email.date_str + " " + attachment.filename
@@ -47,7 +65,9 @@ def save_new_attachments(username, password, save_folder):
                         file.write(attachment.payload)
 
                     print(f"Attachment saved at {attachment_fname}.")
-            mailbox.flag([email.uid], imap_tools.MailMessageFlags.SEEN, False)  # noqa
+            # mailbox.flag([email.uid], imap_tools.MailMessageFlags.SEEN, False)  # noqa
+            # mailbox.flag(email.uid, imap_tools.MailMessageFlags.SEEN, email.seen)
+            # mailbox.flag(email.uid, seen=email.seen)
     print(f"Checked email for {username}")
 
 
