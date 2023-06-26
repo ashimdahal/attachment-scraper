@@ -1,6 +1,8 @@
 from imap_tools import MailBox, AND
+import ssl
 import argparse
 import os
+import imap_tools
 import schedule
 import time
 
@@ -20,12 +22,22 @@ HOSTNAME = args.Hostname
 
 
 def save_new_attachments(username, password, save_folder):
-    with MailBox(HOSTNAME).login(username, password, initial_folder="INBOX") as mailbox:
+    with MailBox(HOSTNAME, ssl_context=ssl.create_default_context()).login(
+        username, password, initial_folder="INBOX"
+    ) as mailbox:
+        print("Login Success")
         # Fetch emails with attachments
         emails = mailbox.fetch(AND(seen=False))
 
+        # emails= mailbox.fetch(criteria=mailbox.has_attachment())
         # Iterate over emails with attachments
         for email in emails:
+            print(email.subject)
+            if not (email.attachments):
+                mailbox.flag(
+                    [email.uid], imap_tools.MailMessageFlags.SEEN, False
+                )  # noqa
+                continue
             for attachment in email.attachments:
                 attachment_fname = email.date_str + " " + attachment.filename
                 if attachment_fname not in os.listdir(save_folder):
@@ -35,6 +47,7 @@ def save_new_attachments(username, password, save_folder):
                         file.write(attachment.payload)
 
                     print(f"Attachment saved at {attachment_fname}.")
+            mailbox.flag([email.uid], imap_tools.MailMessageFlags.SEEN, False)  # noqa
     print(f"Checked email for {username}")
 
 
