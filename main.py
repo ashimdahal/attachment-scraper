@@ -1,11 +1,22 @@
 from imap_tools import MailBox, AND
+import argparse
 import os
 import schedule
 import time
 
-# IMAP server details
-HOSTNAME = "mail.thetwl.org"
-# Folder to save attachments
+parser = argparse.ArgumentParser(
+    prog="Email Attachment Scraping",
+    description="Goes through your emails and saves"
+    "attachments from unseen/unread emails",
+    epilog="Made with <3 by Ashim.",
+)
+
+parser.add_argument(
+    "Hostname", help="provide the hostname of the mailserver. EG: mail.thetwl.org"
+)
+# HOSTNAME = "mail.thetwl.org"
+args = parser.parse_args()
+HOSTNAME = args.Hostname
 
 
 def save_new_attachments(username, password, save_folder):
@@ -23,8 +34,8 @@ def save_new_attachments(username, password, save_folder):
                     with open(filepath, "wb") as file:
                         file.write(attachment.payload)
 
-                    print(f"Attachment '{attachment.filename}' saved.")
-    print("Surfed the mails Succesfully.")
+                    print(f"Attachment saved at {attachment_fname}.")
+    print(f"Checked email for {username}")
 
 
 def check_attachments():
