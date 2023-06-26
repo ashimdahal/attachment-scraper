@@ -3,7 +3,6 @@ from datetime import datetime
 import ssl
 import argparse
 import os
-import imap_tools
 import schedule
 import time
 
@@ -47,14 +46,10 @@ def save_new_attachments(username, password, save_folder):
         )
         latest_date = get_latest_attachment_date(os.listdir(save_folder))
 
-        # emails= mailbox.fetch(criteria=mailbox.has_attachment())
         # Iterate over emails with attachments
         for email in emails:
             # print(email.subject)
             if not (email.attachments):
-                # mailbox.flag(
-                #     [email.uid], imap_tools.MailMessageFlags.SEEN, False
-                # )  # noqa
                 continue
             for attachment in email.attachments:
                 attachment_fname = email.date_str + " " + attachment.filename
@@ -65,9 +60,6 @@ def save_new_attachments(username, password, save_folder):
                         file.write(attachment.payload)
 
                     print(f"Attachment saved at {attachment_fname}.")
-            # mailbox.flag([email.uid], imap_tools.MailMessageFlags.SEEN, False)  # noqa
-            # mailbox.flag(email.uid, imap_tools.MailMessageFlags.SEEN, email.seen)
-            # mailbox.flag(email.uid, seen=email.seen)
     print(f"Checked email for {username}")
 
 
