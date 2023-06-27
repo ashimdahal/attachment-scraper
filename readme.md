@@ -22,8 +22,8 @@ In order to run the script with gmail do the following steps:
 3. Generate an application spefcific password and keep that password in the usernamepwd.txt file.
 
 ### Todo
-- [] Add a better way to share password than plain .txt file.
-- [] Login to office 365 using OAuth2.
-- [] Increase efficienty by not only tracking last date for the attachments saved but also last date for any emails checked.
+- [ ] Add a better way to share password than plain .txt file.
+- [ ] Login to office 365 using OAuth2.
+- [ ] Increase efficienty by not only tracking last date for the attachments saved but also last date for any emails checked.
 
 
