@@ -11,6 +11,12 @@ python main.py <hostname>
 ```
 \<hostname> should be your hostname. Example: mail.thetwl.org, mail.ashimdahal.com, etc.
 
+Format for `usernamepwd.txt`
+```
+user1@gmail.com, password123
+user2@gmail.com, P4$$w0rD
+```
+
 Demo Example:
 ```
 python main.py mail.thetwl.org
