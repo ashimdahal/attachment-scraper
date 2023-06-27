@@ -76,7 +76,7 @@ def check_attachments():
 
 
 # Schedule the save_new_attachments function to run every minute
-schedule.every(2).seconds.do(check_attachments)
+schedule.every(1).minutes.do(check_attachments)
 
 # Run the scheduled tasks indefinitely
 while True:
