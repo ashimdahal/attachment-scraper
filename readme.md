@@ -1,5 +1,5 @@
 # Read and store Email attachments
-As simple as the title goes, this small python script will go through your email, filter out the unseen emails and downloads the attachments in the following pattern:
+As simple as the title goes, this small python script will go through your email, filter emails from the last time it checked them and downloads the attachments in the following pattern:
 `attachments_for_<username at the email address>`
 
 ## How to use?
