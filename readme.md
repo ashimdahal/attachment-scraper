@@ -16,10 +16,11 @@ Format for `usernamepwd.txt`
 user1@gmail.com, password123
 user2@gmail.com, P4$$w0rD
 ```
+// you can either include or remove spaces between the user-email and password as it's getting stripped nonetheless
 
 Demo Example:
 ```
-python main.py mail.thetwl.org
+python main.py imap.gmail.com
 ```
 ## How to run with gmail?
 In order to run the script with gmail do the following steps:
